@@ -41,6 +41,16 @@ entries:
     urls:
     - https://github.com/vehagn/helms/releases/download/helm-kubernetes-operator-v0.3.0-rc.2/kubernetes-operator-0.3.0-rc.2.tgz
     version: 0.3.0-rc.2
+  - apiVersion: v2
+    appVersion: 0.3.0-rc.2
+    created: "2026-03-29T13:54:39.79506167Z"
+    description: NetBird Kubernetes Operator
+    digest: 92e286f0fe514c7453fcf801a7affa4cebcbb119874ce2dc7cf7e712144ccef7
+    name: kubernetes-operator
+    type: application
+    urls:
+    - https://github.com/vehagn/helms/releases/download/helm-kubernetes-operator-v0.3.0-rc.2/kubernetes-operator-0.3.0-rc.2.tgz
+    version: 0.3.0-rc.2
   netbird:
   - apiVersion: v2
     appVersion: 0.46.0
@@ -86,4 +96,4 @@ entries:
     urls:
     - https://github.com/vehagn/helms/releases/download/helm-netbird-operator-config-v0.1.0/netbird-operator-config-0.1.0.tgz
     version: 0.1.0
-generated: "2026-03-29T13:47:50.604528746Z"
+generated: "2026-03-29T13:54:40.035437712Z"
