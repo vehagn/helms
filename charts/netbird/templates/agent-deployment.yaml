@@ -1,0 +1,89 @@
+{{- if .Values.agents.enabled -}}
+
+apiVersion: apps/v1
+kind: {{ .Values.agents.kind }}
+metadata:
+  name: {{ include "netbird.fullname" . }}-agent
+  namespace: {{ include "netbird.namespace" . }}
+  labels:
+    {{- include "netbird.agent.labels" . | nindent 4 }}
+  {{- with .Values.agents.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if eq .Values.agents.kind "Deployment" }}
+  replicas: {{ .Values.agents.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "netbird.agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.agents.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "netbird.agent.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.agents.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "netbird.agent.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.agents.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-agent
+          securityContext:
+            {{- toYaml .Values.agents.securityContext | nindent 12 }}
+          image: "{{ .Values.agents.image.repository }}:{{ .Values.agents.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.agents.image.pullPolicy }}
+          args:
+            - "--log-level"
+            - "{{ .Values.agents.logLevel }}"
+            - "--log-file"
+            - "console"
+          {{- if or (.Values.agents.env) (.Values.agents.envRaw) (.Values.agents.envFromSecret) }}
+          env:
+          {{- range $key, $val := .Values.agents.env }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+          {{- end }}
+          {{- if .Values.agents.envRaw }}
+            {{- with .Values.agents.envRaw }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          {{- range $key, $val := .Values.agents.envFromSecret }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ (split "/" $val)._0 }}
+                  key: {{ (split "/" $val)._1 }}
+          {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.agents.resources | nindent 12 }}
+          {{- if .Values.agents.volumeMounts }}
+          volumeMounts:
+            {{- toYaml .Values.agents.volumeMounts | nindent 12 }}
+          {{- end }}
+      {{- if .Values.agents.volumes }}
+      volumes:
+        {{- toYaml .Values.agents.volumes | nindent 8 }}
+      {{- end }}
+      {{- with .Values.agents.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.agents.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.agents.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

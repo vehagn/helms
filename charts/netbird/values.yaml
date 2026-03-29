@@ -949,6 +949,137 @@ dashboard:
   volumes: []
   # - name: tmp
   #   emptyDir: {}
+## @section NetBird Agent Parameters
+
+agent:
+  ## @param agents.enabled Enable or disable the NetBird agent component.
+  ##
+  enabled: false
+
+  ## @param agents.logLevel Log level for the agent component.
+  ##
+  logLevel: info
+
+  ## @param agents.kind Workload kind for the agent (Deployment or DaemonSet).
+  ##
+  kind: Deployment
+
+  ## @param agents.replicaCount Number of agent pod replicas (only used when kind is Deployment).
+  ##
+  replicaCount: 1
+
+  image:
+    ## @param agents.image.repository Docker image repository for the agent component.
+    ##
+    repository: ghcr.io/netbirdio/netbird
+
+    ## @param agents.image.pullPolicy Docker image pull policy for the agent component.
+    ##
+    pullPolicy: IfNotPresent
+
+    ## @param agents.image.tag Docker image tag for the agent component.
+    ##
+    tag: ""
+
+  ## @param agents.imagePullSecrets Docker registry credentials for pulling the agent image.
+  ##
+  imagePullSecrets: []
+
+  serviceAccount:
+    ## @param agents.serviceAccount.create Whether to create a service account for the agent component.
+    ##
+    create: true
+
+    ## @param agents.serviceAccount.annotations Annotations for the agent service account.
+    ##
+    annotations: {}
+
+    ## @param agents.serviceAccount.name Name of the agent service account.
+    ##
+    name: ""
+
+  ## @param agents.deploymentAnnotations Annotations for the agent deployment/daemonset.
+  ##
+  deploymentAnnotations: {}
+
+  ## @param agents.podAnnotations Annotations for the agent pod(s).
+  ##
+  podAnnotations: {}
+
+  ## @param agents.podSecurityContext Security context for the agent pod(s).
+  ##
+  podSecurityContext: {}
+  # seccompProfile:
+  #   type: RuntimeDefault
+  # sysctls:
+  #   - name: net.ipv4.conf.all.src_valid_mark
+  #     value: "1"
+
+  ## @param agents.securityContext Security context for the agent container.
+  ##
+  securityContext: {}
+  # allowPrivilegeEscalation: false
+  # readOnlyRootFilesystem: false
+  # runAsNonRoot: false
+  # capabilities:
+  #   drop:
+  #     - ALL
+  #   add:
+  #     - NET_ADMIN
+  #     - NET_RAW
+  #     - PERFMON
+  #     - BPF
+
+  ## @param agents.env Environment variables for the agent pod.
+  ##
+  env: {}
+  #NB_HOSTNAME: my-agent
+  #NB_MANAGEMENT_URL: https://netbird.example.com
+  #NB_ADMIN_URL: https://netbird.example.com
+
+  ## @param agents.envRaw Raw environment variables for the agent pod.
+  ##
+  envRaw: []
+
+  ## @param agents.envFromSecret Environment variables from secrets for the agent pod.
+  ## Use this to inject NB_SETUP_KEY from a secret, e.g.: NB_SETUP_KEY: my-secret/setupKey
+  ## The setup key has to be manually created in the NetBird UI.
+  ##
+  envFromSecret: {}
+  #NB_SETUP_KEY: agent-setup-key/NB_SETUP_KEY
+
+  ## @param agents.resources Resource requests and limits for the agent pod.
+  ##
+  resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+  ## @param agents.nodeSelector Node selector for scheduling the agent pod.
+  ##
+  nodeSelector: {}
+
+  ## @param agents.tolerations Tolerations for scheduling the agent pod.
+  ##
+  tolerations: []
+
+  ## @param agents.affinity Affinity rules for scheduling the agent pod.
+  ##
+  affinity: {}
+
+  ## @param agents.volumeMounts Volume mounts for the agent pod.
+  volumeMounts: []
+  # - name: netbird-data
+  #   mountPath: /var/lib/netbird
+
+  ## @param agents.volumes Volumes for the agent pod.
+  volumes: []
+  # - name: netbird-data
+  #   emptyDir: {}
+
 ## @section NetBird Extra Manifests to be included in the chart
 
 extraManifests: {}
